@@ -1,1 +1,15 @@
 Extract links from favorited tweets and send them to Instapaper.
+
+INSTALL:
+
+1. Run instafavs --configure. Fill in the info required.
+
+2. Install instafavs into your crontab, e.g.
+
+  $ crontab -e
+
+to check your Twitter feed every 5 minutes for new favorites, add this line:
+
+*/5 * * * * /path/to/instafavs
+
+Please email any feedback or bug reports to bradb@30sleeps.com.
