@@ -2,7 +2,7 @@ h1. instafavs
 
 by Brad Bollenbach
 
-instafavs extracts links from favorited tweets and send them to Instapaper.
+instafavs extracts links from favorited tweets and sends them to Instapaper.
 
 h2. Install
 
@@ -10,13 +10,13 @@ h2. Install
 instafavs --configure
 </pre>
 
-The install instafavs into your crontab, e.g.
+The install instafavs into your crontab:
 
 <pre>
 $ crontab -e
 </pre>
 
-to check your Twitter feed every 5 minutes for new favorites, add a line like:
+To check your Twitter feed every 5 minutes for new favorites:
 
 <pre>
 # This is what works for my rvm-based setup!
