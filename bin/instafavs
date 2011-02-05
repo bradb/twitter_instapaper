@@ -6,8 +6,11 @@ require File.join(File.expand_path(File.dirname(__FILE__)), "..", "lib", "instaf
 
 $verbose = false
 
-def verbose(msg)
-  puts msg if $verbose
+def verbose(msg, level=1)
+  if $verbose
+    puts "* #{msg}" if level == 1
+    puts "  -> #{msg}" if level == 2
+  end
 end
 
 def send_links_from_fav_tweets_to_instapaper
@@ -16,15 +19,21 @@ def send_links_from_fav_tweets_to_instapaper
   seen_fav_ids = Set.new
   favorites = Twitter.favorites(Instafavs::Config.twitter_username)
   verbose("found #{favorites.size} latest favorites for user #{Instafavs::Config.twitter_username}")
-  favorites.each do |f|
+  favorites.each_with_index do |f, i|
     seen_fav_ids << f.id_str
-    next if Instafavs::Config.last_seen_fav_ids.include?(f.id_str)
+    if Instafavs::Config.last_seen_fav_ids.include?(f.id_str)
+      verbose("skipping ##{i + 1} '#{f.text}', already seen")
+      next
+    end
+    verbose("scanning #{f.text} for urls to extract")
     f.text.scan(%r{http(?:s?)://[^ ]+}).each do |url|
+      verbose("found #{url}, sending to instapaper", 2)
       HTTParty.post("https://www.instapaper.com/api/add",
                     :query => { :url => url, :username => Instafavs::Config.instapaper_username,
                                 :password => Instafavs::Config.instapaper_password })
     end
   end
+  verbose("updating config with #{seen_fav_ids.size} latest seen ids")
   Instafavs::Config.update_last_seen_fav_ids!(seen_fav_ids)
 end
 
@@ -46,7 +55,7 @@ $verbose = options[:verbose]
 
 if options[:configure]
   Instafavs::Config.save!(collect_config_info)
-  puts "Your configuration has been saved."
+  puts "Configuration saved successfully."
 else
   send_links_from_fav_tweets_to_instapaper
 end
