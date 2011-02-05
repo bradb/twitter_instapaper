@@ -10,6 +10,7 @@ INSTALL:
 
 to check your Twitter feed every 5 minutes for new favorites, add this line:
 
-*/5 * * * * /path/to/instafavs
+# This is what works for my rvm-based setup!
+*/5 * * * * bash --login -c instafavs
 
 Please email any feedback or bug reports to bradb@30sleeps.com.
