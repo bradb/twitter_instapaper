@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'twitter'
+require 'httparty'
+require File.join(File.expand_path(File.dirname(__FILE__)), "..", "lib", "instafavs")
+
+$verbose = false
+
+def verbose(msg)
+  puts msg if $verbose
+end
+
+def send_links_from_fav_tweets_to_instapaper
+  Instafavs::Config.load!
+
+  seen_fav_ids = Set.new
+  favorites = Twitter.favorites(Instafavs::Config.twitter_username)
+  verbose("found #{favorites.size} latest favorites for user #{Instafavs::Config.twitter_username}")
+  favorites.each do |f|
+    seen_fav_ids << f.id_str
+    next if Instafavs::Config.last_seen_fav_ids.include?(f.id_str)
+    f.text.scan(%r{http(?:s?)://[^ ]+}).each do |url|
+      HTTParty.post("https://www.instapaper.com/api/add",
+                    :query => { :url => url, :username => Instafavs::Config.instapaper_username,
+                                :password => Instafavs::Config.instapaper_password })
+    end
+  end
+  Instafavs::Config.update_last_seen_fav_ids!(seen_fav_ids)
+end
+
+def collect_config_info
+  config = {}
+  %w(twitter_username instapaper_username instapaper_password).each do |needed_value|
+    while config[needed_value].nil? || config[needed_value] == ""
+      print "#{needed_value.sub(/_/, " ").capitalize}: "
+      config[needed_value] = gets.strip
+    end
+  end
+  
+  config
+end
+
+options = Instafavs::parse_cmd_line_options!
+
+$verbose = options[:verbose]
+
+if options[:configure]
+  Instafavs::Config.save!(collect_config_info)
+  puts "Your configuration has been saved."
+else
+  send_links_from_fav_tweets_to_instapaper
+end
