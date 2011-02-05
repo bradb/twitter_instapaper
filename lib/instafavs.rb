@@ -1,0 +1,3 @@
+module Instafavs
+  # Your code goes here...
+end
