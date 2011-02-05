@@ -16,11 +16,11 @@ The install instafavs into your crontab, e.g.
 $ crontab -e
 </pre>
 
-to check your Twitter feed every 5 minutes for new favorites, add this line:
+to check your Twitter feed every 5 minutes for new favorites, add a line like:
 
 <pre>
 # This is what works for my rvm-based setup!
 */5 * * * * bash --login -c instafavs
 </pre>
 
-Please email any feedback or bug reports to bradb@30sleeps.com.
+Please email any feedback or bug reports to "bradb@30sleeps.com":mailto:bradb@30sleeps.com.
