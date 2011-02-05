@@ -15,19 +15,7 @@ Gem::Specification.new do |s|
   s.post_install_message = <<SETUP
 ********************************************************************************
 
-  To setup instafavs, follow these steps:
-
-  1. Run instafavs --configure. Fill in the info required.
-
-  2. Install instafavs into your crontab, e.g.
-
-    $ crontab -e
-
-  to check your Twitter feed every 5 minutes for new favorites, add this line:
-  
-  */5 * * * * /path/to/instafavs
-  
-  Please email any feedback or bug reports to bradb@30sleeps.com.
+  To install instafavs, please see docs at: https://github.com/bradb/instafavs
 
 ********************************************************************************
 SETUP
