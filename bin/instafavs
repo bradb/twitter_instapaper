@@ -16,15 +16,12 @@ end
 def send_links_from_fav_tweets_to_instapaper
   Instafavs::Config.load!
 
-  seen_fav_ids = Set.new
-  favorites = Twitter.favorites(Instafavs::Config.twitter_username)
-  verbose("found #{favorites.size} latest favorites for user #{Instafavs::Config.twitter_username}")
-  favorites.each_with_index do |f, i|
-    seen_fav_ids << f.id_str
-    if Instafavs::Config.last_seen_fav_ids.include?(f.id_str)
-      verbose("skipping ##{i + 1} '#{f.text}', already seen")
-      next
-    end
+  last_update_run_at = Instafavs::Config.last_update_run_at
+  this_update_run_at = Time.now.utc
+  twitter_username = Instafavs::Config.twitter_username
+  favourites = Instafavs.new_favourites_in_period(twitter_username, last_update_run_at, this_update_run_at)
+  verbose("found #{favourites.size} latest favourites for user #{twitter_username}")
+  favourites.each_with_index do |f, i|
     verbose("scanning #{f.text} for urls to extract")
     f.text.scan(%r{http(?:s?)://[^ ]+}).each do |url|
       verbose("found #{url}, sending to instapaper", 2)
@@ -33,8 +30,8 @@ def send_links_from_fav_tweets_to_instapaper
                                 :password => Instafavs::Config.instapaper_password })
     end
   end
-  verbose("updating config with #{seen_fav_ids.size} latest seen ids")
-  Instafavs::Config.update_last_seen_fav_ids!(seen_fav_ids)
+  verbose("updating last run at timestamp")
+  Instafavs::Config.last_update_run_at!(this_update_run_at)
 end
 
 def collect_config_info
