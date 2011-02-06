@@ -2,7 +2,7 @@
 
 require 'twitter'
 require 'httparty'
-require File.join(File.expand_path(File.dirname(__FILE__)), "..", "lib", "instafavs")
+require File.join(File.expand_path(File.dirname(__FILE__)), "..", "lib", "twitter_instapaper")
 
 $verbose = false
 
@@ -14,14 +14,14 @@ def verbose(msg, level=1)
 end
 
 def send_links_from_fav_tweets_to_instapaper
-  Instafavs::Config.load!
+  TwitterInstapaper::Config.load!
 
   seen_fav_ids = Set.new
-  favourites = Twitter.favorites(Instafavs::Config.twitter_username)
-  verbose("found #{favourites.size} latest favourites for user #{Instafavs::Config.twitter_username}")
+  favourites = Twitter.favorites(TwitterInstapaper::Config.twitter_username)
+  verbose("found #{favourites.size} latest favourites for user #{TwitterInstapaper::Config.twitter_username}")
   favourites.each_with_index do |f, i|
     seen_fav_ids << f.id_str
-    if Instafavs::Config.last_seen_fav_ids.include?(f.id_str)
+    if TwitterInstapaper::Config.last_seen_fav_ids.include?(f.id_str)
       verbose("skipping ##{i + 1} '#{f.text}', already seen")
       next
     end
@@ -29,12 +29,12 @@ def send_links_from_fav_tweets_to_instapaper
     f.text.scan(%r{http(?:s?)://[^ ]+}).each do |url|
       verbose("found #{url}, sending to instapaper", 2)
       HTTParty.post("https://www.instapaper.com/api/add",
-                    :query => { :url => url, :username => Instafavs::Config.instapaper_username,
-                                :password => Instafavs::Config.instapaper_password })
+                    :query => { :url => url, :username => TwitterInstapaper::Config.instapaper_username,
+                                :password => TwitterInstapaper::Config.instapaper_password })
     end
   end
   verbose("updating config with #{seen_fav_ids.size} latest seen ids")
-  Instafavs::Config.update_last_seen_fav_ids!(seen_fav_ids)
+  TwitterInstapaper::Config.update_last_seen_fav_ids!(seen_fav_ids)
 end
 
 def collect_config_info
@@ -49,12 +49,12 @@ def collect_config_info
   config
 end
 
-options = Instafavs::parse_cmd_line_options!
+options = TwitterInstapaper::parse_cmd_line_options!
 
 $verbose = options[:verbose]
 
 if options[:configure]
-  Instafavs::Config.save!(collect_config_info)
+  TwitterInstapaper::Config.save!(collect_config_info)
   puts "Configuration saved successfully."
 else
   send_links_from_fav_tweets_to_instapaper

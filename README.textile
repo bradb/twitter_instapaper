@@ -1,20 +1,20 @@
-h1. instafavs
+h1. twitter_instapaper
 
 by Brad Bollenbach
 
-instafavs extracts links from favourited tweets and sends them to Instapaper.
+twitter_instapaper extracts links from favourited tweets and sends them to Instapaper.
 
 h2. Install
 
 <pre>
-$ instafavs --configure
+$ twit_inst --configure
 Twitter username: 30sleeps
 Instapaper username: bradb@30sleeps.com
 Instapaper password: somepass
 Configuration saved successfully.
 </pre>
 
-The install instafavs into your crontab:
+The install twit_inst into your crontab:
 
 <pre>
 $ crontab -e
@@ -24,9 +24,9 @@ To check your Twitter feed every 5 minutes for new favourites:
 
 <pre>
 # This is what works for my rvm-based setup!
-*/5 * * * * bash --login -c instafavs
+*/5 * * * * bash --login -c twit_inst
 </pre>
 
-instafavs only polls your latest 20 favourites each time, so you should ensure your cron job is set at a reasonable enough interval that no favourites will be missed.
+twit_inst only polls your latest 20 favourites each time, so you should ensure your cron job is set at a reasonable enough interval that no favourites will be missed.
 
 Please email any feedback or bug reports to "bradb@30sleeps.com":mailto:bradb@30sleeps.com.

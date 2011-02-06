@@ -1,8 +1,8 @@
 require 'optparse'
 require 'yaml'
 
-module Instafavs
-  CONFIG_FILENAME = File.expand_path("~/.instafavs")
+module TwitterInstapaper
+  CONFIG_FILENAME = File.expand_path("~/.twitter-instapaper")
 
   module Config
     
@@ -18,7 +18,7 @@ module Instafavs
       end
     
       def load!
-        raise "missing configuration file. run 'instafavs --configure'." unless File.exists?(CONFIG_FILENAME)
+        raise "missing configuration file. run 'twit_inst --configure'." unless File.exists?(CONFIG_FILENAME)
         @config = YAML.load_file(CONFIG_FILENAME)
       end
     
@@ -49,13 +49,13 @@ module Instafavs
   def self.parse_cmd_line_options!
     options = {}
     OptionParser.new do |opts|
-      opts.banner = "Usage: instafavs [options]"
+      opts.banner = "Usage: twit_inst [options]"
 
       opts.on("-c", "--configure", "Configure Twitter and Instapaper account details") do |c|
         options[:configure] = true
       end
       
-      opts.on("-v", "--verbose", "Provide more detailed output of what instafavs is doing") do |c|
+      opts.on("-v", "--verbose", "Provide more detailed output at runtime") do |c|
         options[:verbose] = true
       end
     end.parse!
