@@ -27,4 +27,8 @@ To check your Twitter feed every 5 minutes for new favorites:
 */5 * * * * bash --login -c instafavs
 </pre>
 
+instafavs only polls your latest 20 favorites each time, so you should ensure
+your cron job is set at a reasonable enough interval that no favorites will
+be missed.
+
 Please email any feedback or bug reports to "bradb@30sleeps.com":mailto:bradb@30sleeps.com.
