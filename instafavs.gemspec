@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Brad Bollenbach"]
   s.email       = ["bradb@30sleeps.com"]
   s.homepage    = "https://github.com/bradb/instafavs"
-  s.summary     = %q{Extract links from favorited tweets and send them to Instapaper}
+  s.summary     = %q{Extract links from favourited tweets and send them to Instapaper}
   s.add_dependency("twitter", ">= 1.1.2")
   s.add_dependency("httparty", ">= 0.7.3")
   s.post_install_message = <<SETUP
