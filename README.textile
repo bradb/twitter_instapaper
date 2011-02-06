@@ -14,13 +14,13 @@ Instapaper password: somepass
 Configuration saved successfully.
 </pre>
 
-The install twit_inst into your crontab:
+Then install twit_inst into your crontab:
 
 <pre>
 $ crontab -e
 </pre>
 
-To check your Twitter feed every 5 minutes for new favourites:
+To poll your Twitter feed every 5 minutes for new favourites:
 
 <pre>
 # This is what works for my rvm-based setup!
