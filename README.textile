@@ -6,6 +6,14 @@ twitter_instapaper extracts links from favourited tweets and sends them to Insta
 
 h2. Install
 
+Grab the gem:
+
+<pre>
+$ gem install twitter_instapaper
+</pre>
+
+Set it up:
+
 <pre>
 $ twit_inst --configure
 Twitter username: 30sleeps
