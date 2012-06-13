@@ -20,8 +20,8 @@ def send_links_from_fav_tweets_to_instapaper
   favourites = Twitter.favorites(TwitterInstapaper::Config.twitter_username)
   verbose("found #{favourites.size} latest favourites for user #{TwitterInstapaper::Config.twitter_username}")
   favourites.each_with_index do |f, i|
-    seen_fav_ids << f.id_str
-    if TwitterInstapaper::Config.last_seen_fav_ids.include?(f.id_str)
+    seen_fav_ids << f.id.to_s
+    if TwitterInstapaper::Config.last_seen_fav_ids.include?(f.id.to_s)
       verbose("skipping ##{i + 1} '#{f.text}', already seen")
       next
     end
